@@ -1,0 +1,58 @@
+{
+  "id": "7e34c267-1190-4d5f-874c-5b6ed61d4351",
+  "revision": 0,
+  "last_node_id": 3,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "TextEditInput",
+      "pos": [0, 0],
+      "size": [430, 370],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [{"name": "text", "type": "STRING", "slot_index": 0, "links": [1]}],
+      "properties": {"Node name for S&R": "TextEditInput"},
+      "widgets_values": ["{\n  \"subject\": \"A chibi-style female character with short, spiky pink hair, large pink eyes, and a neutral facial expression. She has a slender build with exaggerated proportions typical of chibi art.\",\n  \"outfit\": \"A red traditional Chinese-style tunic with a high collar and vertical frog button closures down the front. The tunic is cinched at the waist with a matching red sash tied in a knot on the left side. The garment is paired with loose-fitting dark gray trousers that extend to the ankles.\",\n  \"composition\": \"The character stands in a full-body pose with arms hanging straight down at her sides, palms facing inward. Her legs are positioned slightly apart, and her feet are flat on the ground. The image is presented against a plain white background with clean linework and flat coloring typical of anime-style illustration.\"\n}"]
+    },
+    {
+      "id": 2,
+      "type": "TextEditJsonPromptTemplate",
+      "pos": [510, 0],
+      "size": [530, 560],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {"name": "json_text", "type": "STRING", "link": 1},
+        {"name": "template", "type": "STRING", "widget": {"name": "template"}, "link": null}
+      ],
+      "outputs": [{"name": "text", "type": "STRING", "slot_index": 0, "links": [2]}],
+      "properties": {"Node name for S&R": "TextEditJsonPromptTemplate"},
+      "widgets_values": ["subject_definitions:\n<Picture 1> is the source image and composition anchor: {{subject}}\n<Picture 2> is the outfit reference image: {{outfit}}\n<Subject 1> is the character from <Picture 1>.\n\nsummary:\n[keyframe completion] Edit <Picture 1> so that <Subject 1> wears the outfit from <Picture 2> while retaining the original identity, pose, expression, and framing.\n\nretention_analysis:\n<Picture 1> (composition anchor): partially_preserved - identity, pose, expression, composition, and art style\n<Picture 2> (outfit reference): attribute_transfer - clothing design, colors, and silhouette\n<Subject 1>: partially_preserved - original appearance and pose retained, outfit replaced\n\ndetailed_description:\nCreate one still frame matching <Picture 1>. The source character is described as: {{subject}} The transferred clothing is described as: {{outfit}} Preserve the original composition: {{composition}} Adapt the clothing to the character while keeping the reference design and colors. The camera is static and nothing moves.\n\noverall_soundscape:\nN/A\n\nnon_diegetic_music:\nN/A"]
+    },
+    {
+      "id": 3,
+      "type": "TextEditDisplay",
+      "pos": [1120, 0],
+      "size": [470, 420],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [{"name": "text", "type": "STRING", "link": 2}],
+      "outputs": [],
+      "properties": {"Node name for S&R": "TextEditDisplay", "displayed_text": ""},
+      "widgets_values": []
+    }
+  ],
+  "links": [
+    [1, 1, 0, 2, 0, "STRING"],
+    [2, 2, 0, 3, 0, "STRING"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {"ds": {"scale": 0.8, "offset": [80, 100]}},
+  "version": 0.4
+}
