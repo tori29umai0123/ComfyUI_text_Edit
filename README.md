@@ -17,6 +17,7 @@ Do not place the ZIP itself in `custom_nodes`, or nest the folder inside another
 | Node | What it does |
 | --- | --- |
 | **Text Input** | Outputs the multiline text you type. Dynamic prompt expansion is disabled, so brackets and other special characters remain literal. |
+| **Text to Bool** | Outputs `false` for an empty string and `true` when the input contains one or more characters. Whitespace-only input also returns `true`. |
 | **Text Display** | Shows the incoming string in a read-only area after execution. The displayed text is saved with the workflow. |
 | **Text Placeholder Replace** | Replaces literal `[text1]` through `[text16]` in `base_text` with connected strings. Set `input_count` to show the corresponding input sockets. An unconnected placeholder stays unchanged; an empty connected string removes it. |
 | **JSON Prompt Template** | Inserts JSON values into a multiline template. Use `{{subject}}` for a top-level key, or `{{/person/name}}` and `{{/items/0}}` for nested values. An empty template outputs indented JSON. |
@@ -29,7 +30,7 @@ JSON input may be plain text or enclosed in a ` ```json ` code fence. The fence 
 
 ## Compatibility
 
-The nodes use their own IDs (`TextEditInput`, `TextEditDisplay`, `TextEditPlaceholderReplace`, and `TextEditJsonPromptTemplate`). You can install this package alongside ComfyUISAM3DPose. Workflows containing the original `SAM3DPoseto...` node IDs still need ComfyUISAM3DPose; this package does not automatically replace those IDs.
+The nodes use their own IDs (`TextEditInput`, `TextEditTextToBool`, `TextEditDisplay`, `TextEditPlaceholderReplace`, and `TextEditJsonPromptTemplate`). You can install this package alongside ComfyUISAM3DPose. Workflows containing the original `SAM3DPoseto...` node IDs still need ComfyUISAM3DPose; this package does not automatically replace those IDs.
 
 ## Verification and license
 

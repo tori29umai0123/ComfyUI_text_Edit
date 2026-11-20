@@ -31,6 +31,22 @@ class TextInput:
         return (text,)
 
 
+class TextToBool(io.ComfyNode):
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="TextEditTextToBool",
+            display_name="Text to Bool",
+            category="Text Edit",
+            inputs=[io.String.Input("text", force_input=True)],
+            outputs=[io.Boolean.Output(display_name="bool")],
+        )
+
+    @classmethod
+    def execute(cls, text):
+        return io.NodeOutput(bool(text))
+
+
 class TextDisplay:
     @classmethod
     def INPUT_TYPES(cls):

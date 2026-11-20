@@ -19,7 +19,7 @@ class TextNodesTests(unittest.TestCase):
         nodes = module.NODE_CLASS_MAPPINGS
         self.assertEqual(set(nodes), {
             "TextEditInput", "TextEditDisplay", "TextEditPlaceholderReplace",
-            "TextEditJsonPromptTemplate"})
+            "TextEditJsonPromptTemplate", "TextEditTextToBool"})
         self.assertEqual(nodes["TextEditInput"]().run("日本語\n[abc]"), ("日本語\n[abc]",))
         self.assertFalse(nodes["TextEditInput"].INPUT_TYPES()
                          ["required"]["text"][1]["dynamicPrompts"])

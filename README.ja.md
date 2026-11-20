@@ -17,6 +17,7 @@ ZIP をそのまま `custom_nodes` に置いたり、`ComfyUI_text_Edit` フォ�
 | ノード | 機能 |
 | --- | --- |
 | **Text Input** | 入力した複数行の文字列を出力します。動的プロンプト展開を無効にしているため、括弧なども入力どおりに扱います。 |
+| **Text to Bool** | 入力テキストが空文字列なら `false`、1文字以上あれば `true` を出力します。空白や改行だけのテキストも `true` です。 |
 | **Text Display** | 実行後、受け取った文字列を読み取り専用欄に表示します。表示内容はワークフローにも保存されます。 |
 | **Text Placeholder Replace** | `base_text` 内の `[text1]` ～ `[text16]` を、接続した文字列で置換します。`input_count` で入力端子の表示数を指定します。未接続の箇所はそのまま残り、空文字列を接続した箇所は削除されます。 |
 | **JSON Prompt Template** | JSON の値を複数行テンプレートに差し込みます。トップレベルは `{{subject}}`、入れ子や配列は `{{/person/name}}`、`{{/items/0}}` のように参照します。テンプレートが空なら整形済み JSON を出力します。 |
@@ -29,7 +30,7 @@ JSON 入力はそのままでも、` ```json ` と ` ``` ` で囲まれていて
 
 ## 互換性
 
-ノード ID は独立した `TextEditInput`、`TextEditDisplay`、`TextEditPlaceholderReplace`、`TextEditJsonPromptTemplate` です。ComfyUISAM3DPose と同時にインストールできます。元の `SAM3DPoseto...` ノード ID を使った既存ワークフローには、引き続き ComfyUISAM3DPose が必要です。自動置換は行いません。
+ノード ID は独立した `TextEditInput`、`TextEditTextToBool`、`TextEditDisplay`、`TextEditPlaceholderReplace`、`TextEditJsonPromptTemplate` です。ComfyUISAM3DPose と同時にインストールできます。元の `SAM3DPoseto...` ノード ID を使った既存ワークフローには、引き続き ComfyUISAM3DPose が必要です。自動置換は行いません。
 
 ## 動作確認とライセンス
 
