@@ -18,6 +18,8 @@ ZIP をそのまま `custom_nodes` に置いたり、`ComfyUI_text_Edit` フォ�
 | --- | --- |
 | **Text Input** | 入力した複数行の文字列を出力します。動的プロンプト展開を無効にしているため、括弧なども入力どおりに扱います。 |
 | **Text to Bool** | 入力テキストが空文字列なら `false`、1文字以上あれば `true` を出力します。空白や改行だけのテキストも `true` です。 |
+| **Text Concatenate** | 接続した複数のテキストを順番に結合します。接続すると次の入力端子が自動で増えます。`delimiter` には区切り文字を指定でき、`\\n` などの正規表現風エスケープにも対応します。`clean_whitespace` を有効にすると各入力の連続空白を1スペースに整理し、前後の空白を除去します。 |
+| **Text Replace** | `base` 内の文字列を上から順に置換します。`find_word1` を接続すると、次の `find_word` / `replace_word` ペアが自動で増えます。`replace_word` が未接続なら検索語を削除し、空の検索語はスキップします。 |
 | **Text Display** | 実行後、受け取った文字列を読み取り専用欄に表示します。表示内容はワークフローにも保存されます。 |
 | **Text Placeholder Replace** | `base_text` 内の `[text1]` ～ `[text16]` を、接続した文字列で置換します。`input_count` で入力端子の表示数を指定します。未接続の箇所はそのまま残り、空文字列を接続した箇所は削除されます。 |
 | **JSON Prompt Template** | JSON の値を複数行テンプレートに差し込みます。トップレベルは `{{subject}}`、入れ子や配列は `{{/person/name}}`、`{{/items/0}}` のように参照します。テンプレートが空なら整形済み JSON を出力します。 |
@@ -30,7 +32,7 @@ JSON 入力はそのままでも、` ```json ` と ` ``` ` で囲まれていて
 
 ## 互換性
 
-ノード ID は独立した `TextEditInput`、`TextEditTextToBool`、`TextEditDisplay`、`TextEditPlaceholderReplace`、`TextEditJsonPromptTemplate` です。ComfyUISAM3DPose と同時にインストールできます。元の `SAM3DPoseto...` ノード ID を使った既存ワークフローには、引き続き ComfyUISAM3DPose が必要です。自動置換は行いません。
+ノード ID は独立した `TextEditInput`、`TextEditTextToBool`、`TextEditTextConcatenate`、`TextEditTextReplace`、`TextEditDisplay`、`TextEditPlaceholderReplace`、`TextEditJsonPromptTemplate` です。ComfyUISAM3DPose と同時にインストールできます。元の `SAM3DPoseto...` ノード ID を使った既存ワークフローには、引き続き ComfyUISAM3DPose が必要です。自動置換は行いません。
 
 ## 動作確認とライセンス
 

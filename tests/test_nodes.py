@@ -19,7 +19,8 @@ class TextNodesTests(unittest.TestCase):
         nodes = module.NODE_CLASS_MAPPINGS
         self.assertEqual(set(nodes), {
             "TextEditInput", "TextEditDisplay", "TextEditPlaceholderReplace",
-            "TextEditJsonPromptTemplate", "TextEditTextToBool"})
+            "TextEditJsonPromptTemplate", "TextEditTextToBool",
+            "TextEditTextConcatenate", "TextEditTextReplace"})
         self.assertEqual(nodes["TextEditInput"]().run("日本語\n[abc]"), ("日本語\n[abc]",))
         self.assertFalse(nodes["TextEditInput"].INPUT_TYPES()
                          ["required"]["text"][1]["dynamicPrompts"])
@@ -28,6 +29,31 @@ class TextNodesTests(unittest.TestCase):
         result = module.NODE_CLASS_MAPPINGS["TextEditDisplay"]().run("a\nb")
         self.assertEqual(result["ui"]["text"], ["a\nb"])
         self.assertEqual(result["result"], ())
+
+    def test_text_concatenate(self):
+        node = module.NODE_CLASS_MAPPINGS["TextEditTextConcatenate"]
+        self.assertEqual(node.execute({"text1": "hello", "text2": "world"}, "", False)[0],
+                         "helloworld")
+        self.assertEqual(node.execute({"text2": "B", "text1": "A"}, ", ", False)[0],
+                         "A, B")
+        self.assertEqual(node.execute({"text1": "A", "text2": "B"}, r"\n", False)[0],
+                         "A\nB")
+        self.assertEqual(node.execute(
+            {"text1": "  A  B\n", "text2": " C\tD "}, "|", True)[0],
+                         "A B|C D")
+
+    def test_text_replace(self):
+        node = module.NODE_CLASS_MAPPINGS["TextEditTextReplace"]
+        self.assertEqual(node.execute(
+            "one two one", {"find_word1": "one", "replace_word1": "1"})[0],
+                         "1 two 1")
+        self.assertEqual(node.execute("abc", {"find_word1": "a"})[0], "bc")
+        self.assertEqual(node.execute(
+            "abc", {"find_word1": "", "replace_word1": "x"})[0], "abc")
+        self.assertEqual(node.execute("cat and dog", {
+            "find_word1": "cat", "replace_word1": "dog",
+            "find_word2": "dog", "replace_word2": "bird",
+        })[0], "bird and bird")
 
     def test_placeholder_replacement(self):
         node = module.NODE_CLASS_MAPPINGS["TextEditPlaceholderReplace"]()

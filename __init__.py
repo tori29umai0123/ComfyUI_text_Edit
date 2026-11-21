@@ -1,9 +1,12 @@
 """Standalone text nodes for ComfyUI."""
 
-from .nodes import TextInput, TextDisplay, TextPlaceholderReplace, JsonPromptTemplate, TextToBool
+from .nodes import (JsonPromptTemplate, TextConcatenate, TextDisplay, TextInput,
+                    TextPlaceholderReplace, TextReplace, TextToBool)
 
 NODE_CLASS_MAPPINGS = {
     "TextEditTextToBool": TextToBool,
+    "TextEditTextConcatenate": TextConcatenate,
+    "TextEditTextReplace": TextReplace,
     "TextEditInput": TextInput,
     "TextEditDisplay": TextDisplay,
     "TextEditPlaceholderReplace": TextPlaceholderReplace,
@@ -12,6 +15,8 @@ NODE_CLASS_MAPPINGS = {
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "TextEditTextToBool": "Text to Bool",
+    "TextEditTextConcatenate": "Text Concatenate",
+    "TextEditTextReplace": "Text Replace",
     "TextEditInput": "Text Input",
     "TextEditDisplay": "Text Display",
     "TextEditPlaceholderReplace": "Text Placeholder Replace",

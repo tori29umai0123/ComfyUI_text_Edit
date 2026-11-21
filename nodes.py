@@ -9,7 +9,28 @@ from comfy_api.latest import io
 
 
 MAX_REPLACEMENTS = 16
+MAX_CONCAT_INPUTS = 64
+MAX_TEXT_REPLACE_PAIRS = 64
 JSON_FIELD = re.compile(r"\{\{([^{}\n]*)\}\}")
+DELIMITER_ESCAPE = re.compile(
+    r"\\(?:[\\nrtfv0]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8})"
+)
+
+
+def _decode_delimiter(delimiter):
+    """Decode common regular-expression-style escapes without altering Unicode text."""
+    escapes = {
+        r"\\": "\\", r"\n": "\n", r"\r": "\r", r"\t": "\t",
+        r"\f": "\f", r"\v": "\v", r"\0": "\0",
+    }
+
+    def replace(match):
+        value = match.group(0)
+        if value in escapes:
+            return escapes[value]
+        return chr(int(value[2:], 16))
+
+    return DELIMITER_ESCAPE.sub(replace, str(delimiter))
 
 
 class TextInput:
@@ -45,6 +66,82 @@ class TextToBool(io.ComfyNode):
     @classmethod
     def execute(cls, text):
         return io.NodeOutput(bool(text))
+
+
+class TextConcatenate(io.ComfyNode):
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="TextEditTextConcatenate",
+            display_name="Text Concatenate",
+            category="Text Edit",
+            description="Join connected text inputs with a configurable delimiter.",
+            inputs=[
+                io.Autogrow.Input(
+                    "texts",
+                    template=io.Autogrow.TemplateNames(
+                        io.String.Input("text"),
+                        names=[f"text{index}" for index in range(1, MAX_CONCAT_INPUTS + 1)],
+                        min=1,
+                    ),
+                ),
+                io.String.Input("delimiter", multiline=False, dynamic_prompts=False, default=""),
+                io.Boolean.Input("clean_whitespace", default=False),
+            ],
+            outputs=[io.String.Output(display_name="text")],
+        )
+
+    @classmethod
+    def execute(cls, texts=None, delimiter="", clean_whitespace=False):
+        texts = texts or {}
+        values = [
+            str(texts[name])
+            for name in sorted(
+                (name for name in texts if re.fullmatch(r"text\d+", name)),
+                key=lambda name: int(name[4:]),
+            )
+            if texts[name] is not None
+        ]
+        if clean_whitespace:
+            values = [re.sub(r"\s+", " ", value).strip() for value in values]
+        return io.NodeOutput(_decode_delimiter(delimiter).join(values))
+
+
+class TextReplace(io.ComfyNode):
+    @classmethod
+    def define_schema(cls):
+        names = []
+        for index in range(1, MAX_TEXT_REPLACE_PAIRS + 1):
+            names.extend((f"find_word{index}", f"replace_word{index}"))
+        return io.Schema(
+            node_id="TextEditTextReplace",
+            display_name="Text Replace",
+            category="Text Edit",
+            description="Replace connected search terms in order using literal text matching.",
+            inputs=[
+                io.String.Input("base", force_input=True),
+                io.Autogrow.Input(
+                    "words",
+                    template=io.Autogrow.TemplateNames(
+                        io.String.Input("word"), names=names, min=2,
+                    ),
+                ),
+            ],
+            outputs=[io.String.Output(display_name="text")],
+        )
+
+    @classmethod
+    def execute(cls, base, words=None):
+        words = words or {}
+        result = str(base)
+        for index in range(1, MAX_TEXT_REPLACE_PAIRS + 1):
+            find_word = words.get(f"find_word{index}")
+            if find_word is None or str(find_word) == "":
+                continue
+            replace_word = words.get(f"replace_word{index}", "")
+            replacement = "" if replace_word is None else str(replace_word)
+            result = result.replace(str(find_word), replacement)
+        return io.NodeOutput(result)
 
 
 class TextDisplay:
