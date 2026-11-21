@@ -30,6 +30,13 @@ class TextNodesTests(unittest.TestCase):
         self.assertEqual(result["ui"]["text"], ["a\nb"])
         self.assertEqual(result["result"], ())
 
+    def test_text_to_bool(self):
+        node = module.NODE_CLASS_MAPPINGS["TextEditTextToBool"]
+        self.assertFalse(node.execute()[0])
+        self.assertFalse(node.execute("")[0])
+        self.assertTrue(node.execute("text")[0])
+        self.assertTrue(node.execute(" \n")[0])
+
     def test_text_concatenate(self):
         node = module.NODE_CLASS_MAPPINGS["TextEditTextConcatenate"]
         self.assertEqual(node.execute({"text1": "hello", "text2": "world"}, "", False)[0],

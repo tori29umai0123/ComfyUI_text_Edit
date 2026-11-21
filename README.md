@@ -17,7 +17,7 @@ Do not place the ZIP itself in `custom_nodes`, or nest the folder inside another
 | Node | What it does |
 | --- | --- |
 | **Text Input** | Outputs the multiline text you type. Dynamic prompt expansion is disabled, so brackets and other special characters remain literal. |
-| **Text to Bool** | Outputs `false` for an empty string and `true` when the input contains one or more characters. Whitespace-only input also returns `true`. |
+| **Text to Bool** | Outputs `false` when disconnected or given an empty string, and `true` when the input contains one or more characters. Whitespace-only input also returns `true`. |
 | **Text Concatenate** | Joins connected text inputs in order and automatically adds another socket when the last one is connected. Set `delimiter` to the separator; regex-style escapes such as `\\n` are supported. Enabling `clean_whitespace` collapses whitespace in each input to one space and trims its ends. |
 | **Text Replace** | Replaces literal strings in `base` from top to bottom. Connecting `find_word1` automatically adds the next `find_word` / `replace_word` pair. An unconnected `replace_word` deletes the search term, and an empty search term is skipped. |
 | **Text Display** | Shows the incoming string in a read-only area after execution. The displayed text is saved with the workflow. |

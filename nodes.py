@@ -59,12 +59,12 @@ class TextToBool(io.ComfyNode):
             node_id="TextEditTextToBool",
             display_name="Text to Bool",
             category="Text Edit",
-            inputs=[io.String.Input("text", force_input=True)],
+            inputs=[io.String.Input("text", force_input=True, optional=True)],
             outputs=[io.Boolean.Output(display_name="bool")],
         )
 
     @classmethod
-    def execute(cls, text):
+    def execute(cls, text=None):
         return io.NodeOutput(bool(text))
 
 
